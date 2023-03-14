@@ -1,4 +1,4 @@
-obj-m := x.o
+obj-m := icmpbackdoor.o
 CC = gcc -Wall
 KDIR := /lib/modules/$(shell uname -r)/build
 PWD := $(shell pwd)
